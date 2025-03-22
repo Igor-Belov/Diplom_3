@@ -5,6 +5,7 @@
 package site.nomoreparties.stellarburgers;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,7 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@DisplayName("Тесты, что пользователь может зарегистрироваться")
 @RunWith(Parameterized.class)
 public class SignUpTest {
     private WebDriver driver;
@@ -40,8 +42,8 @@ public class SignUpTest {
     @Parameterized.Parameters
     public static Collection<Object[]> browsers() {
         return Arrays.asList(new Object[][]{
-                {"yandex"}
-                // {"chrome"}
+                {"yandex"},
+                {"chrome"}
         });
     }
 
@@ -75,6 +77,7 @@ public class SignUpTest {
 
     }
 
+    @DisplayName("Тест - все поля заполнены верно. Регистрация успешна")
     @Test
     public void testSuccessfulRegistrationOk() {
         registrationPage.enterName("Test User");
@@ -86,6 +89,7 @@ public class SignUpTest {
         assertTrue(driver.getCurrentUrl().contains("https://stellarburgers.nomoreparties.site/login"));
     }
 
+    @DisplayName("Тест - все поля заполнены, пароль короче допустимого на 1 символ. Ошибка регистрации")
     @Test
     public void testTooShortPasswordError() {
         registrationPage.enterName("Test User");
@@ -98,6 +102,7 @@ public class SignUpTest {
         assertEquals("Некорректный пароль", errorMessage);
     }
 
+    @DisplayName("Тест - все поля заполнены, пароль минимально допустимой длинны. Регистрация успешна")
     @Test
     public void testMinShortPasswordOk() {
         registrationPage.enterName("Test User");
