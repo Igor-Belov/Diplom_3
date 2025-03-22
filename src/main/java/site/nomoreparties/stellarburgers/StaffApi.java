@@ -12,7 +12,7 @@ public class StaffApi {
     public static String BASE_URL = "https://stellarburgers.nomoreparties.site";
 
     @Step("StaffApi - действие, создаем пользователя через API и возвращаем accessToken")
-    public static String getAccessToken(String email, String password, String name) {
+    public static String createUser(String email, String password, String name) {
         return given().log().all()
                 .contentType(ContentType.JSON)
                 .body(Map.of("email", email, "password", password, "name", name))

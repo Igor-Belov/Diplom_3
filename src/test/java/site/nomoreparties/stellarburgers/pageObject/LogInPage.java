@@ -7,36 +7,30 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class RegistrationPage {
+public class LogInPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    public static final String REGISTRATION_PAGE_URL = MainPage.PAGE_URL + "/register";
+    public static final String LOGIN_PAGE_URL = MainPage.PAGE_URL + "/login";
 
-    private static final By NAME_INPUT = By.cssSelector("input[name='name']");
+    // Локаторы элементов страницы
     private static final By EMAIL_INPUT = By.xpath("//label[contains(text(), 'Email')]/following-sibling::input");
     private static final By PASSWORD_INPUT = By.cssSelector("input[name='Пароль']");
-    private static final By REGISTER_BUTTON = By.cssSelector("button.button_button__33qZ0");
+    private static final By LOGIN_BUTTON = By.cssSelector("button.button_button__33qZ0");
     private static final By ERROR_MESSAGE = By.cssSelector("p.input__error");
-    private static final By LOGIN = By.cssSelector("a.Auth_link__1fOlj");
 
-
-    public RegistrationPage(WebDriver driver) {
+    public LogInPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, 5);
     }
-    @Step("Действие - Ввод имени пользователя в соответствующее поле")
-    public void enterName(String name) {
-        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(NAME_INPUT));
-        nameInput.clear();
-        nameInput.sendKeys(name);
-    }
+
     @Step("Действие - Ввод email пользователя в соответствующее поле")
     public void enterEmail(String email) {
         WebElement emailInput = wait.until(ExpectedConditions.visibilityOfElementLocated(EMAIL_INPUT));
         emailInput.clear();
         emailInput.sendKeys(email);
     }
+
     @Step("Действие - Ввод пароля пользователя в соответствующее поле")
     public void enterPassword(String password) {
         WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(PASSWORD_INPUT));
@@ -44,25 +38,18 @@ public class RegistrationPage {
         passwordInput.sendKeys(password);
     }
 
-    @Step("Действие - нажали кнопку 'Регистрация'")
-    public void clickRegisterButton() {
-        WebElement registerButton = wait.until(ExpectedConditions.elementToBeClickable(REGISTER_BUTTON));
-        registerButton.click();
-        wait.until(
-                ExpectedConditions.or(
-                        ExpectedConditions.urlToBe(LogInPage.LOGIN_PAGE_URL),
-                        ExpectedConditions.visibilityOfElementLocated(ERROR_MESSAGE)
-                )
-        );
+    @Step("Действие - Нажатие кнопки 'Войти'")
+    public void clickLoginButton() {
+        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(LOGIN_BUTTON));
+        loginButton.click();
     }
 
-    @Step("Действие - нажали кнопку 'Войти'")
-    public void clickLogInButton() {
-        WebElement LogInButton = wait.until(ExpectedConditions.elementToBeClickable(LOGIN));
-        LogInButton.click();
+    @Step("Проверка - Открыта ли страница авторизации")
+    public boolean isLoginPageOpen() {
+        return wait.until(ExpectedConditions.urlToBe(LOGIN_PAGE_URL));
     }
 
-    @Step("Действие - вернули сообщение об ошибке")
+    @Step("Действие - Получение сообщения об ошибке")
     public String getErrorMessage() {
         WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(ERROR_MESSAGE));
         return errorMessage.getText();

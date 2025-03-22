@@ -14,6 +14,7 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import site.nomoreparties.stellarburgers.pageObject.LogInPage;
 import site.nomoreparties.stellarburgers.pageObject.RegistrationPage;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class SignUpTest {
     private RegistrationPage registrationPage;
     private String password;
     private String email;
+    private LogInPage loginPage;
 
     private String browserName;
 
@@ -63,15 +65,16 @@ public class SignUpTest {
         driver.manage().window().maximize();
         driver.get(RegistrationPage.REGISTRATION_PAGE_URL);
         registrationPage = new RegistrationPage(driver);
+        loginPage = new LogInPage(driver);
     }
 
     @After
     public void tearDown() {
         if (driver != null) {
             driver.quit();
-            String AccessToken = StaffApi.getAccessToken(email, password);
-            if (AccessToken != null) {
-                StaffApi.deleteUser(AccessToken);
+            String accessToken = (StaffApi.getAccessToken(email, password));
+            if (accessToken != null) {
+                StaffApi.deleteUser(accessToken.replace("Bearer ", ""));
             }
         }
 
@@ -86,7 +89,7 @@ public class SignUpTest {
         password = "P@ssword123";
         registrationPage.enterPassword(password);
         registrationPage.clickRegisterButton();
-        assertTrue(driver.getCurrentUrl().contains("https://stellarburgers.nomoreparties.site/login"));
+        assertTrue(loginPage.isLoginPageOpen());
     }
 
     @DisplayName("Тест - все поля заполнены, пароль короче допустимого на 1 символ. Ошибка регистрации")
@@ -111,6 +114,6 @@ public class SignUpTest {
         password = "Aa3456";
         registrationPage.enterPassword(password);
         registrationPage.clickRegisterButton();
-        assertTrue(driver.getCurrentUrl().contains("https://stellarburgers.nomoreparties.site/login"));
+        assertTrue(loginPage.isLoginPageOpen());
     }
 }
