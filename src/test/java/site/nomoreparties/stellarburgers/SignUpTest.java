@@ -5,6 +5,7 @@
 package site.nomoreparties.stellarburgers;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +28,10 @@ import static org.junit.Assert.assertTrue;
 @DisplayName("Тесты, что пользователь может зарегистрироваться")
 @RunWith(Parameterized.class)
 public class SignUpTest {
+    private static final String VALID_PASSWORD = "P@ssword123";
+    private static final String SHORT_PASSWORD = "Aa345";
+    private static final String MINIMAL_PASSWORD = "Aa3456";
+
     private WebDriver driver;
     private RegistrationPage registrationPage;
     private String password;
@@ -35,12 +40,10 @@ public class SignUpTest {
 
     private String browserName;
 
-    // Конструктор для параметризованных тестов
     public SignUpTest(String browserName) {
         this.browserName = browserName;
     }
 
-    // Параметры для тестов: Google Chrome и Яндекс.Браузер
     @Parameterized.Parameters
     public static Collection<Object[]> browsers() {
         return Arrays.asList(new Object[][]{
@@ -77,16 +80,20 @@ public class SignUpTest {
                 StaffApi.deleteUser(accessToken.replace("Bearer ", ""));
             }
         }
+    }
 
+    @Step("Создали уникальный email")
+    private void CreateEmail() {
+        email = LocalDateTime.now() + "@test.ui";
     }
 
     @DisplayName("Тест - все поля заполнены верно. Регистрация успешна")
     @Test
     public void testSuccessfulRegistrationOk() {
         registrationPage.enterName("Test User");
-        email = LocalDateTime.now() + "@test.ui";
+        CreateEmail();
         registrationPage.enterEmail(email);
-        password = "P@ssword123";
+        password = VALID_PASSWORD;
         registrationPage.enterPassword(password);
         registrationPage.clickRegisterButton();
         assertTrue(loginPage.isLoginPageOpen());
@@ -96,9 +103,9 @@ public class SignUpTest {
     @Test
     public void testTooShortPasswordError() {
         registrationPage.enterName("Test User");
-        email = LocalDateTime.now() + "@example.com";
+        CreateEmail();
         registrationPage.enterEmail(email);
-        password = "Aa345";
+        password = SHORT_PASSWORD;
         registrationPage.enterPassword(password);
         registrationPage.clickRegisterButton();
         String errorMessage = registrationPage.getErrorMessage();
@@ -109,9 +116,9 @@ public class SignUpTest {
     @Test
     public void testMinShortPasswordOk() {
         registrationPage.enterName("Test User");
-        email = LocalDateTime.now() + "@example.com";
+        CreateEmail();
         registrationPage.enterEmail(email);
-        password = "Aa3456";
+        password = MINIMAL_PASSWORD;
         registrationPage.enterPassword(password);
         registrationPage.clickRegisterButton();
         assertTrue(loginPage.isLoginPageOpen());

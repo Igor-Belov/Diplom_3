@@ -9,10 +9,10 @@ public class Header {
     private WebDriver driver;
 
     // Локаторы элементов шапки
-    private static final By CONSTRACTOR = By.cssSelector("a.AppHeader_header__link__3D_hX.AppHeader_header__link_active__1IkJo");//просто показать что можно и через css
+    private static final By CONSTRACTOR = By.xpath("//a[@href='/' and @class = 'AppHeader_header__link__3D_hX']");//просто показать что можно и через css
     private static final By ORDER_FEED = By.xpath("//a[@href='/feed' and @class = 'AppHeader_header__link__3D_hX AppHeader_header__link_active__1IkJo']");// и через xpath
     private static final By PERSONAL_ACCOUNT = By.xpath("//a[@href='/account' and @class = 'AppHeader_header__link__3D_hX']");
-    private static final By LOGO = By.xpath(" //div[AppHeader_header__logo__2D0X2]/a[@href='/account' and @class = 'AppHeader_header__link__3D_hX']");
+    private static final By LOGO = By.xpath("//div[@class = 'AppHeader_header__logo__2D0X2']/a[@href='/']");
 
     public Header(WebDriver driver) {
         this.driver = driver;

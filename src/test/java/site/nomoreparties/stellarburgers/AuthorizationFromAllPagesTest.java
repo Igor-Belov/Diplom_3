@@ -8,6 +8,7 @@
 package site.nomoreparties.stellarburgers;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
@@ -51,7 +52,6 @@ public class AuthorizationFromAllPagesTest {
         this.browserName = browserName;
     }
 
-    // Параметры для тестов: Google Chrome и Яндекс.Браузер
     @Parameterized.Parameters
     public static Collection<Object[]> browsers() {
         return Arrays.asList(new Object[][]{
@@ -95,14 +95,19 @@ public class AuthorizationFromAllPagesTest {
         }
     }
 
+    @Step("Действие - ввели логин и пароль")
+    private void enterCred() {
+        loginPage.enterEmail(email);
+        loginPage.enterPassword(password);
+    }
+
     @DisplayName("Тест - вход по кнопке «Войти в аккаунт» на главной")
     @Test
     public void testLoginFromMainPage() {
         driver.get(MainPage.MAIN_PAGE_URL);
         mainPage.clickEnterInAccountButton();
         assertTrue(loginPage.isLoginPageOpen());
-        loginPage.enterEmail(email);
-        loginPage.enterPassword(password);
+        enterCred();
         loginPage.clickLoginButton();
         assertNotNull(mainPage.isMainPageForAuthUser());
 
@@ -114,8 +119,7 @@ public class AuthorizationFromAllPagesTest {
         driver.get(MainPage.MAIN_PAGE_URL);
         header.clickPERSONAL_ACCOUNT();
         assertTrue(loginPage.isLoginPageOpen());
-        loginPage.enterEmail(email);
-        loginPage.enterPassword(password);
+        enterCred();
         loginPage.clickLoginButton();
         assertNotNull(mainPage.isMainPageForAuthUser());
     }
@@ -126,8 +130,7 @@ public class AuthorizationFromAllPagesTest {
         driver.get(RegistrationPage.REGISTRATION_PAGE_URL);
         registrationPage.clickLogInButton();
         assertTrue(loginPage.isLoginPageOpen());
-        loginPage.enterEmail(email);
-        loginPage.enterPassword(password);
+        enterCred();
         loginPage.clickLoginButton();
         assertNotNull(mainPage.isMainPageForAuthUser());
     }
@@ -138,8 +141,7 @@ public class AuthorizationFromAllPagesTest {
         driver.get(PasswordRecoveryPage.PASSWORD_RECOVERY_PAGE_URL);
         passwordRecoveryPage.clickLoginButton();
         assertTrue(loginPage.isLoginPageOpen());
-        loginPage.enterEmail(email);
-        loginPage.enterPassword(password);
+        enterCred();
         loginPage.clickLoginButton();
         assertNotNull(mainPage.isMainPageForAuthUser());
     }

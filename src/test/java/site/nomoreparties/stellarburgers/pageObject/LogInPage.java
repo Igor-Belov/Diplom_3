@@ -21,7 +21,7 @@ public class LogInPage {
 
     public LogInPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, 5);
+        this.wait = new WebDriverWait(driver, 10);
     }
 
     @Step("Действие - Ввод email пользователя в соответствующее поле")

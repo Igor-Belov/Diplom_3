@@ -2,6 +2,7 @@ package site.nomoreparties.stellarburgers;
 
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 
 import java.util.Map;
@@ -23,7 +24,6 @@ public class StaffApi {
                 .path("accessToken");
     }
 
-
     @Step("StaffApi - действие, получаем accessToken залогинившись через API")
     public static String getAccessToken(String email, String password) {
         return given().log().all()
@@ -34,6 +34,24 @@ public class StaffApi {
                 .then().log().all()
                 .extract()
                 .path("accessToken");
+    }
+
+    @Step("StaffApi - действие, получаем все Token залогинившись через API")
+    public static Map<String, String> getTokensAndLogin(String email, String password) {
+        Response response = given().log().all()
+                .contentType(ContentType.JSON)
+                .body(Map.of("password", password, "email", email))
+                .when()
+                .post(BASE_URL + "/api/auth/login")
+                .then().log().all()
+                .extract()
+                .response();
+        String accessToken = response.path("accessToken");
+        String refreshToken = response.path("refreshToken");
+        return Map.of(
+                "accessToken", accessToken,
+                "refreshToken", refreshToken
+        );
     }
 
     @Step("StaffApi - действие, удаление пользователя")
