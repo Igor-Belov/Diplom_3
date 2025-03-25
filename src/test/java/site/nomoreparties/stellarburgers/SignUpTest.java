@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @DisplayName("Тесты, что пользователь может зарегистрироваться")
-@RunWith(Parameterized.class)
+//@RunWith(Parameterized.class)
 public class SignUpTest {
     private static final String VALID_PASSWORD = "P@ssword123";
     private static final String SHORT_PASSWORD = "Aa345";
@@ -38,32 +38,24 @@ public class SignUpTest {
     private String email;
     private LogInPage loginPage;
 
-    private String browserName;
-
-    public SignUpTest(String browserName) {
-        this.browserName = browserName;
-    }
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> browsers() {
-        return Arrays.asList(new Object[][]{
-                {"yandex"},
-                {"chrome"}
-        });
-    }
+//    private String browserName;
+//
+//    public SignUpTest(String browserName) {
+//        this.browserName = browserName;
+//    }
+//
+//    @Parameterized.Parameters
+//    public static Collection<Object[]> browsers() {
+//        return Arrays.asList(new Object[][]{
+//                {"yandex"},
+//                {"chrome"}
+//        });
+//    }
 
     @Before
     public void setUp() {
-        // Настройка драйвера в зависимости от выбранного браузера
-        if (browserName.equals("chrome")) {
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
-        } else if (browserName.equals("yandex")) {
-            WebDriverManager.chromedriver().driverVersion("132.0.6834.0").setup();
-            ChromeOptions options = new ChromeOptions();
-            options.setBinary("C:/Users/belov/AppData/Local/Yandex/YandexBrowser/Application/browser.exe");
-            driver = new ChromeDriver(options);
-        }
+        String browser = System.getProperty("browser", "chrome");
+        driver = DriverFactory.createDriver(browser);
 
         driver.manage().window().maximize();
         driver.get(RegistrationPage.REGISTRATION_PAGE_URL);
